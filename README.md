@@ -14,7 +14,7 @@ To install SIDR, clone this repository and run setup.py.
     # or for development
     pip install --editable .
 
-See the documentation for more details.
+See the [documentation](https://sidr.readthedocs.io) for more details.
 
 ## Usage
 
@@ -22,7 +22,7 @@ Currently, only the default mode of SIDR–which computes variables from raw dat
 
     sidr default -d [taxdump path] -b [bamfile] -f [assembly FASTA] -r [BLAST results] -m model.dot -k tokeep.contigids -x toremove.contigids -t [target phylum] 
 
-See the documentation for more details.
+See the [documentation](https://sidr.readthedocs.io) for more details.
 
 ## TODO
 
