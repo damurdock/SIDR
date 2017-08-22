@@ -1,7 +1,8 @@
 import click
 import pandas
-import common
 import csv
+
+from sidr import common
 
 
 def readRunfile(runfile, taxidDict, taxDump, classificationLevel):

@@ -1,8 +1,8 @@
 import pysam
 import click
-import common
 import gc
 
+from sidr import common
 from Bio.SeqUtils import GC  # for GC content
 from Bio.SeqIO.FastaIO import FastaIterator
 

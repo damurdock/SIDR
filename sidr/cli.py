@@ -2,9 +2,10 @@
 import click
 import os
 
-import default
-import runfile
-import filterReads
+from sidr import default
+from sidr import runfile
+
+CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help'])
 
 
 def validate_taxdump(value, method):
@@ -28,7 +29,7 @@ def cli():
     pass
 
 
-@cli.command(name="default")
+@cli.command(name="default", context_settings=CONTEXT_SETTINGS)
 @click.option('--bam', '-b', type=click.Path(exists=True), help="Alignment of reads to preliminary assembly, in BAM format.")
 @click.option('--fasta', '-f', type=click.Path(exists=True), help="Preliminary assembly, in FASTA format.")
 @click.option('--blastresults', '-r', type=click.Path(exists=True), help="Classification of preliminary assembly from BLAST (or similar tools).")
@@ -47,7 +48,7 @@ def default_runner(bam, fasta, blastresults, taxdump, model, output, tokeep, tor
     default.runAnalysis(bam, fasta, blastresults, taxdump, model, output, tokeep, toremove, target, level)
 
 
-@cli.command(name="runfile")
+@cli.command(name="runfile", context_settings=CONTEXT_SETTINGS)
 @click.option('--infile', '-i', type=click.Path(exists=True), help="Tab-delimited input file.")
 @click.option('--taxdump', '-d', type=click.Path(), default=os.environ.get('BLASTDB'), help="Location of the NCBI Taxonomy dump. Default is $BLASTDB.")
 @click.option('--level', '-l', default="phylum", help="The classification level to use when constructing the model. Default is 'phylum'.")
@@ -60,8 +61,8 @@ def runfile_runner(infile, taxdump, level):
     validate_taxdump(taxdump, runfile_runner)
     runfile.runAnalysis(taxdump, infile, level)
 
-
-@cli.command(name="filter")
+""" WIP
+@cli.command(name="filter", context_settings=CONTEXT_SETTINGS)
 @click.option('--tokeep', '-k', type=click.Path(), default="", help="File containing list of contigs from the alignment to keep.")
 @click.option('--bam', '-b', type=click.Path(exists=True), help="Alignment of reads to preliminary assembly, in BAM format.")
 @click.option('-i1', type=click.Path(exists=True), help="Right read fastq to extract reads from.")
@@ -69,10 +70,11 @@ def runfile_runner(infile, taxdump, level):
 @click.option('-o1', type=click.Path(), help="Right read fastq to extract reads to.")
 @click.option('-o2', type=click.Path(), help="Left read fastq to extract reads to.")
 def filter_runner(tokeep, bam, i1, i2, o1, o2):
-    """
-    Filters reads aligning to the given contigs.
-    """
+"""
+#Filters reads aligning to the given contigs.
+"""
     filterReads.runFilter(tokeep, bam, i1, i2, o1, o2)
 
 if __name__ == "__main__":  # TODO Setuptools
     cli(prog_name="sidr")
+""" 
