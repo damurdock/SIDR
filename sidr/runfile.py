@@ -12,7 +12,6 @@ def readRunfile(runfile, taxidDict, taxDump, classificationLevel):
     classMap = {}
     with open(runfile) as rf:
         runfile = pandas.read_csv(rf, index_col=False)
-        print(runfile)
     for column in unnecessaryColumns:
         runfile.drop(column, axis=1, inplace=True)  # https://stackoverflow.com/questions/13411544/delete-column-from-pandas-dataframe for inplace
     runfile = runfile.fillna(value=False)

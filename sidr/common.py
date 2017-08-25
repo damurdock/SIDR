@@ -105,21 +105,14 @@ def constructCorpus(contigs, classMap):
     corpus = []
     testdata = []
     features = []
-    try:
-        contigIterator = contigs.iteritems()
-    except AttributeError:
-        try:
-            contigIterator = contigs.items()  # because python 3
-        except AttributeError: # TODO: fix so runfile and default return same type of 'contigs' object
-            contigIterator = contigs
-    for key, value in contigIterator:
-        variableBuf = value.variables.values()
-        features = value.variables.keys()
-        if value.classification:
-            variableBuf.append(value.classification)
+    for contig in contigs:
+        variableBuf = list(contig.variables.values())
+        features = list(contig.variables.keys())
+        if contig.classification:
+            variableBuf.append(contig.classification)
             corpus.append(variableBuf)
         else:
-            variableBuf.insert(0, key)
+            variableBuf.insert(0, contig.contigid)
             testdata.append(variableBuf)
     return corpus, testdata, features
 
