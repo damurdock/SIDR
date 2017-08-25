@@ -7,12 +7,8 @@ SIDR (pronounced: cider) is a tool to filter Next Generation Sequencing (NGS) da
 ## Installation
 
 To install SIDR, clone this repository and run setup.py.
-
-    git clone 
-    cd SIDR
-    python setup.py install
-    # or for development
-    pip install --editable .
+    
+    pip install git+https://github.com/damurdock/SIDR.git
 
 See the [documentation](https://sidr.readthedocs.io) for more details.
 
