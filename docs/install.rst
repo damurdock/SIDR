@@ -43,14 +43,21 @@ Installing from Source with pip
 
 .. note:: When installing from source, setuptools will attempt to contact PyPI to install dependencies. If this is not an option then dependencies will need to be manually installed.
 
-If PyPI is not an option, SIDR can be installed by downloading the source from [future Github link], unzipping it, then running the following command::
+If PyPI is not an option, SIDR can be installed by running the following command::
 
-    pip install /path/to/source
+    pip install git+https://github.com/damurdock/SIDR.git
+
+If you're installing SIDR in order to develop it, download the source from GitHub_ and install it by running the following command in the unzipped source directory::
+
+    pip install --editable .
+
+.. _GitHub: https://github.com/damurdock/SIDR.git
 
 Installing from Source with Setup.py
 ------------------------------------
 
-If for some reason pip is completely unavailable, SIDR can be installed by downloading the source from [future Github link] and running the following command command in the unzipped source directory::
+If for some reason pip is completely unavailable, SIDR can be installed by downloading the source from GitHub_ and running the following command command in the unzipped source directory::
 
     python setup.py install
 
+.. _GitHub: https://github.com/damurdock/SIDR.git
