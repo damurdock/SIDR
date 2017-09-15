@@ -160,3 +160,44 @@ def classifyData(classifier, testdata, classMap):
     contigIDs = list(zip(*testdata))[0]  # https://stackoverflow.com/questions/4937491/matrix-transpose-in-python
     result = list(zip(contigIDs, Y))
     return result
+
+def generateOutput(tokeep, toremove, result, contigs, target, output):
+    """
+    Generates output files for completed runs.
+
+    Args:
+        tokeep: File-like object to output target contigs to.
+        toremove: File-like object to output non-target contigs to.
+        corpus: List of sidr.common.Contig objects from input.
+        result: Classified data from sidr.common.classifyData().
+        target: Target classification.
+    """
+    targetContigIDs = []
+    nontargetContigIDs = []
+    outputLines = []
+    for contig in contigs:
+        if contig.classification:
+            if target == contig.classification:
+                targetContigIDs.append(contig.contigid)
+            else:
+                nontargetContigIDs.append(contig.contigid)
+            outputLines.append([contig.contigid, contig.classification, "input"])
+    for contig in result:
+        if target == contig[1]:
+            targetContigIDs.append(contig[0])
+        else:
+            nontargetContigIDs.append(contig[0])
+        outputLines.append([contig[0], contig[1], "dt"])
+    with open(output, "w+") as f:
+        f.write("contigid, classification, source\n")
+        for ln in outputLines:
+            f.write("%s, %s, %s\n" % (ln[0], ln[1], ln[2]))  # https://stackoverflow.com/questions/899103/writing-a-list-to-a-file-with-python for %s\n suggestion
+    if tokeep:
+        with open(tokeep, "w+") as f:
+            for i in targetContigIDs:
+                f.write("%s\n" % i )
+    if toremove:
+        with open(toremove, "w+") as f:
+            for i in nontargetContigIDs:
+                f.write("%s\n" % i)
+

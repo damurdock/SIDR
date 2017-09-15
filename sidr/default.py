@@ -109,28 +109,8 @@ def runAnalysis(bam, fasta, blastresults, taxdump, model, output, tokeep, toremo
     gc.collect()
     click.echo("BLAST results loaded")
     corpus, testdata, features = common.constructCorpus(list(contigs.values()), classMap)
-    print(testdata)
     gc.collect()
     click.echo("Corpus constucted, %d contigs in corpus and %d contigs in test data" % (len(corpus), len(testdata)))
     classifier = common.constructModel(corpus, classList, features)
     result = common.classifyData(classifier, testdata, classMap)
-    #blastList = contigsWithClass.items()
-    with open(output, "w+") as f:
-        for i in result:
-            f.write("%s, %s\n" % i)  # https://stackoverflow.com/questions/899103/writing-a-list-to-a-file-with-python for %s\n suggestion
-    if tokeep:
-        with open(tokeep, "w+") as f:
-            for i in result:
-                if target in map(str.lower, i):  # https://stackoverflow.com/questions/3627784/case-insensitive-in-python
-                    f.write("%s\n" % i[0])
-#            for i in blastList:
-#                if target in map(str.lower, i):
-#                    f.write("%s\n" % i[0])
-    if toremove:
-        with open(toremove, "w+") as f:
-            for i in result:
-                if target not in map(str.lower, i):
-                    f.write("%s\n" % i[0])
-#            for i in blastList:
-#                if target not in map(str.lower, i):
-#                    f.write("%s\n" % i[0])
+    common.generateOutput(tokeep, toremove, result, corpus, target, output)

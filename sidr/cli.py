@@ -51,15 +51,20 @@ def default_runner(bam, fasta, blastresults, taxdump, model, output, tokeep, tor
 @cli.command(name="runfile", context_settings=CONTEXT_SETTINGS)
 @click.option('--infile', '-i', type=click.Path(exists=True), help="Tab-delimited input file.")
 @click.option('--taxdump', '-d', type=click.Path(), default=os.environ.get('BLASTDB'), help="Location of the NCBI Taxonomy dump. Default is $BLASTDB.")
+@click.option('--output', '-o', type=click.Path(), default="%s/classifications.txt" % os.getcwd())
+@click.option('--model', '-m', type=click.Path(), default="", help="Location to save a graphical representation of the trained decision tree (optional). Output is in the form of a DOT file.")
+@click.option('--tokeep', '-k', type=click.Path(), default="", help="Location to save the contigs identified as the target organism(optional).")
+@click.option('--toremove', '-x', type=click.Path(), default="", help="Location to save the contigs identified as not belonging to the target organism (optional).")
+@click.option('--target', '-t', help="The identity of the target organism at the chosen classification level. It is recommended to use the organism's phylum.")
 @click.option('--level', '-l', default="phylum", help="The classification level to use when constructing the model. Default is 'phylum'.")
-def runfile_runner(infile, taxdump, level):
+def runfile_runner(infile, taxdump, level, model, output, tokeep, toremove, target):
     """
     Runs a custom analysis using pre-computed data from BBMap.
 
     Input data will be read for all variables which will be used to construct a Decision Tree model.
     """
     validate_taxdump(taxdump, runfile_runner)
-    runfile.runAnalysis(taxdump, infile, level)
+    runfile.runAnalysis(taxdump, infile, level,model, output, tokeep, toremove, target)
 
 """ WIP
 @cli.command(name="filter", context_settings=CONTEXT_SETTINGS)
