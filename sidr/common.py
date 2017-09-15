@@ -168,7 +168,7 @@ def generateOutput(tokeep, toremove, result, contigs, target, output):
     Args:
         tokeep: File-like object to output target contigs to.
         toremove: File-like object to output non-target contigs to.
-        corpus: List of sidr.common.Contig objects from input.
+        contigs: List of sidr.common.Contig objects from input.
         result: Classified data from sidr.common.classifyData().
         target: Target classification.
     """
