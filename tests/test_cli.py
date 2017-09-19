@@ -1,7 +1,8 @@
-import sidr.cli as main
+import sidr
 import pytest
+import mock
 
-from unittest import mock
+from contextlib import closing
 try:  # https://stackoverflow.com/questions/11914472/stringio-in-python3
     from StringIO import StringIO
 except ImportError:
@@ -33,31 +34,33 @@ test_gc = {"1": 50.0}
 # https://docs.python.org/dev/library/unittest.mock.html#mock-open
 # http://boris-42.me/the-simplest-way-in-python-to-mock-open-during-unittest/
 # https://gist.github.com/vpetro/1174019
-
+# https://code.activestate.com/recipes/576650-with-statement-for-stringio/
 
 def filegenerator(filestrings):
     for f in filestrings:
-        yield StringIO(f)
+        yield closing(StringIO(f))
 
 
 def test_parseTaxdump():
-    with mock.patch('main.main.open', mock.mock_open()) as m:
+    with mock.patch('sidr.common.open', mock.mock_open()) as m:
         m.side_effect = filegenerator(test_taxfiles)
-        assert main.parseTaxdump("test") == test_taxdump
+        assert sidr.common.parseTaxdump("test") == test_taxdump
 
 
 def test_taxidToLineage():
-    assert main.taxidToLineage("2", test_taxdump, "phylum") == "phy"
-    assert main.taxidToLineage("5", test_taxdump, "phylum") == "mergephy"
+    assert sidr.common.taxidToLineage("2", test_taxdump, "phylum") == "phy"
+    assert sidr.common.taxidToLineage("5", test_taxdump, "phylum") == "mergephy"
     with pytest.raises(Exception) as excinfo:
-        main.taxidToLineage("4", test_taxdump, "phylum")
+        sidr.common.taxidToLineage("4", test_taxdump, "phylum")
     assert "ERROR: Taxon id 4 has been deleted from the NCBI DB." in str(excinfo.value)
 
 
 def test_readFasta():
-    with mock.patch('main.main.open', mock.mock_open()) as m:
+    with mock.patch('sidr.default.open', mock.mock_open()) as m:
         m.side_effect = filegenerator(test_fastafile)
-        assert main.readFasta("test") == test_gc
+        fastaCheck = sidr.default.readFasta("test")
+        assert fastaCheck.keys() == ['1']
+        assert fastaCheck.values()[0].variables["GC"] == 50
 
 
 def test_readBAM():
