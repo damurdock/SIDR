@@ -22,8 +22,8 @@ def test_readFasta():
     with mock.patch('sidr.default.open', mock.mock_open()) as m:
         m.side_effect = filegenerator([test_fasta])
         fastaCheck = sidr.default.readFasta("test")
-        assert fastaCheck.keys() == ['1']
-        assert fastaCheck.values()[0].variables["GC"] == 50
+        assert list(fastaCheck.keys()) == ['1']
+        assert list(fastaCheck.values())[0].variables["GC"] == 50
 
 def test_readBAM():
     return
