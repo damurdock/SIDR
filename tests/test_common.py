@@ -39,7 +39,7 @@ def filegenerator(filestrings):
 def test_parseTaxdump():
     with mock.patch('sidr.common.open', mock.mock_open()) as m:
         m.side_effect = filegenerator(test_taxfiles)
-        assert sidr.common.parseTaxdump("test") == test_taxdump
+        assert sidr.common.parseTaxdump("test", False)[0] == test_taxdump
 
 
 def test_taxidToLineage():

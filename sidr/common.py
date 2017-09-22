@@ -17,7 +17,7 @@ class Contig(object):
         self.classification = classification
 
 
-def parseTaxdump(blastdb):
+def parseTaxdump(blastdb, createDict):
     """
     Parses a local copy of the NCBI Taxonomy dump for use by later functions.
 
@@ -28,6 +28,7 @@ def parseTaxdump(blastdb):
             taxid of the parent taxon and the name of the current taxon.
     """
     taxdump = {}
+    taxidDict = {}
     with open(blastdb + "/names.dmp") as names:
         click.echo("Reading names.dmp")
         namesReader = list(csv.reader(names, delimiter="|"))
@@ -35,6 +36,8 @@ def parseTaxdump(blastdb):
             for line in nr:
                 if "scientific name" in line[3].strip():
                     taxdump[line[0].strip()] = line[1].strip()
+                if createDict:
+                    taxidDict[line[1].strip()] = line[0].strip()
     with open(blastdb + "/nodes.dmp") as nodes:
         click.echo("Reading nodes.dmp")
         nodesReader = list(csv.reader(nodes, delimiter="|"))
@@ -53,7 +56,7 @@ def parseTaxdump(blastdb):
         with click.progressbar(delReader) as dr:
             for line in dr:
                 taxdump[line[0].strip()] = ["deleted"]
-    return taxdump
+    return taxdump, taxidDict
 
 
 def taxidToLineage(taxid, taxdump, classificationLevel):

@@ -91,8 +91,8 @@ def readBLAST(classification, taxdump, classificationLevel, contigs):
     return contigs, classMap, classList
 
 
-def runAnalysis(bam, fasta, blastresults, taxdump, model, output, tokeep, toremove, target, level):
-    taxdump = common.parseTaxdump(taxdump)
+def runAnalysis(bam, fasta, blastresults, taxdump, model, output, tokeep, toremove, target, binary, level):
+    taxdump, taxidDict = common.parseTaxdump(taxdump, False)
     gc.collect()
     click.echo("Taxdump parsed, %d taxIDs loaded" % len(taxdump))
     contigs = readFasta(fasta)

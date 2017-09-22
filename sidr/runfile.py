@@ -34,21 +34,8 @@ def readRunfile(runfile, taxidDict, taxDump, classificationLevel):
     return contigs, classMap, classList
 
 
-def parseTaxids(blastdb):
-    taxidDict = {}
-    with open(blastdb + "/names.dmp") as names:
-        click.echo("Reading names.dmp")
-        namesReader = list(csv.reader(names, delimiter="|"))
-        with click.progressbar(namesReader) as nr:
-            for line in nr:
-                taxidDict[line[1].strip()] = line[0].strip()
-    return taxidDict
-
-
-
 def runAnalysis(blastdb, runfile, classificationLevel, model, output, tokeep, toremove, binary, target):
-    taxDump = common.parseTaxdump(blastdb)
-    taxidDict = parseTaxids(blastdb)
+    taxDump, taxidDict = common.parseTaxdump(blastdb, True)
     contigs, classMap, classList = readRunfile(runfile, taxidDict, taxDump, classificationLevel)
     corpus, testdata, features = common.constructCorpus(contigs, classMap, binary, target)
     click.echo("Corpus constucted, %d contigs in corpus and %d contigs in test data" % (len(corpus), len(testdata)))
