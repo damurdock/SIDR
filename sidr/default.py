@@ -79,10 +79,7 @@ def readBLAST(classification, taxdump, classificationLevel, contigs):
                 contig = record[0]
                 taxid = record[1]
                 taxonomy = common.taxidToLineage(taxid, taxdump, classificationLevel)
-                if taxonomy.lower() != "nematoda":  # TODO fix this
-                    taxonomy = "other"
-                else:
-                    taxonomy = "nematoda"
+                taxonomy = taxonomy.lower()
                 try:
                     if taxonomy not in classList:  # I love python
                         classList.append(taxonomy)
@@ -108,7 +105,7 @@ def runAnalysis(bam, fasta, blastresults, taxdump, model, output, tokeep, toremo
                                              taxdump, level.lower(), contigs)
     gc.collect()
     click.echo("BLAST results loaded")
-    corpus, testdata, features = common.constructCorpus(list(contigs.values()), classMap)
+    corpus, testdata, features = common.constructCorpus(list(contigs.values()), classMap, binary, target)
     gc.collect()
     click.echo("Corpus constucted, %d contigs in corpus and %d contigs in test data" % (len(corpus), len(testdata)))
     classifier = common.constructModel(corpus, classList, features)

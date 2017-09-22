@@ -46,11 +46,11 @@ def parseTaxids(blastdb):
 
 
 
-def runAnalysis(blastdb, runfile, classificationLevel, model, output, tokeep, toremove, target):
+def runAnalysis(blastdb, runfile, classificationLevel, model, output, tokeep, toremove, binary, target):
     taxDump = common.parseTaxdump(blastdb)
     taxidDict = parseTaxids(blastdb)
     contigs, classMap, classList = readRunfile(runfile, taxidDict, taxDump, classificationLevel)
-    corpus, testdata, features = common.constructCorpus(contigs, classMap)
+    corpus, testdata, features = common.constructCorpus(contigs, classMap, binary, target)
     click.echo("Corpus constucted, %d contigs in corpus and %d contigs in test data" % (len(corpus), len(testdata)))
     classifier = common.constructModel(corpus, classList, features)
     result = common.classifyData(classifier, testdata, classMap)

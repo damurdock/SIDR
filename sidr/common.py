@@ -2,6 +2,7 @@ import click
 import csv
 
 from sklearn import tree
+from sklearn import ensemble
 
 try:
     from sklearn import model_selection as mscv
@@ -88,7 +89,7 @@ def taxidToLineage(taxid, taxdump, classificationLevel):
         raise Exception("Taxon id %s was not found in the NCBI DB.\nPlease update your DB and try again." % taxid)
 
 
-def constructCorpus(contigs, classMap):
+def constructCorpus(contigs, classMap, binary, target):
     """
     Construct a corpus for scikit-learn to learn from.
 
@@ -109,8 +110,16 @@ def constructCorpus(contigs, classMap):
         variableBuf = list(contig.variables.values())
         features = list(contig.variables.keys())
         if contig.classification:
-            variableBuf.append(contig.classification)
-            corpus.append(variableBuf)
+            if binary:
+                if contig.classification.lower() == target.lower():
+                    variableBuf.append("target")
+                    corpus.append(variableBuf)
+                else:
+                    variableBuf.append("nontarget")
+                    corpus.append(variableBuf)
+            else:
+                variableBuf.append(contig.classification)
+                corpus.append(variableBuf)
         else:
             variableBuf.insert(0, contig.contigid)
             testdata.append(variableBuf)
@@ -134,14 +143,25 @@ def constructModel(corpus, classList, features):
         X.append([item[0], item[1]])
         Y.append(item[2])
     X_train, X_test, Y_train, Y_test = mscv.train_test_split(X, Y, test_size=0.3, random_state=0)
-
-    classifier = tree.DecisionTreeClassifier()
-    classifier = classifier.fit(X_train, Y_train)
-    click.echo("Classifier built, score is %s out of 1.00" % classifier.score(X_test, Y_test))
+    treeClassifier = tree.DecisionTreeClassifier()
+    treeClassifier = treeClassifier.fit(X_train, Y_train)
+    click.echo("Decision tree classifier built, score is %s out of 1.00" % treeClassifier.score(X_test, Y_test))
+    baggingClassifier = ensemble.BaggingClassifier()
+    baggingClassifier = baggingClassifier.fit(X_train, Y_train)
+    click.echo("Bagging classifier built, score is %s out of 1.00" % baggingClassifier.score(X_test, Y_test))
+    forestClassifier = ensemble.RandomForestClassifier(n_estimators=10)
+    forestClassifier = forestClassifier.fit(X_train, Y_train)
+    click.echo("Random forest classifier built, score is %s out of 1.00" % forestClassifier.score(X_test, Y_test))
+    adaClassifier = ensemble.AdaBoostClassifier(n_estimators=100)
+    adaClassifier = adaClassifier.fit(X_train, Y_train)
+    click.echo("AdaBoost classifier built, score is %s out of 1.00" % adaClassifier.score(X_test, Y_test))
+    gradientClassifier = ensemble.GradientBoostingClassifier(n_estimators=100)
+    gradientClassifier = gradientClassifier.fit(X_train, Y_train)
+    click.echo("Gradient tree boosting classifier built, score is %s out of 1.00" % gradientClassifier.score(X_test, Y_test))
     with open("model.dot", 'w') as dotfile:
-        tree.export_graphviz(classifier, out_file=dotfile, feature_names=features,
+        tree.export_graphviz(treeClassifier, out_file=dotfile, feature_names=features,
                              class_names=classList, filled=True, rounded=True, special_characters=True)
-    return classifier
+    return treeClassifier
 
 
 def classifyData(classifier, testdata, classMap):

@@ -38,14 +38,15 @@ def cli():
 @click.option('--output', '-o', type=click.Path(), default="%s/classifications.txt" % os.getcwd())
 @click.option('--tokeep', '-k', type=click.Path(), default="", help="Location to save the contigs identified as the target organism(optional).")
 @click.option('--toremove', '-x', type=click.Path(), default="", help="Location to save the contigs identified as not belonging to the target organism (optional).")
+@click.option('--binary', is_flag=True, help="Use binary target\/nontarget classification.")
 @click.option('--target', '-t', help="The identity of the target organism at the chosen classification level. It is recommended to use the organism's phylum.")
 @click.option('--level', '-l', default="phylum", help="The classification level to use when constructing the model. Default is 'phylum'.")
 # @click.option('--verbose', '-v', count=True, help="Output more debugging options, repeat to increase verbosity (unimplemented).")
-def default_runner(bam, fasta, blastresults, taxdump, model, output, tokeep, toremove, target, level):
+def default_runner(bam, fasta, blastresults, taxdump, model, output, tokeep, toremove, binary, target, level):
     """
     Runs the default analysis using raw preassembly data.
     """
-    default.runAnalysis(bam, fasta, blastresults, taxdump, model, output, tokeep, toremove, target, level)
+    default.runAnalysis(bam, fasta, blastresults, taxdump, model, output, tokeep, toremove, binary, target, level)
 
 
 @cli.command(name="runfile", context_settings=CONTEXT_SETTINGS)
@@ -56,15 +57,16 @@ def default_runner(bam, fasta, blastresults, taxdump, model, output, tokeep, tor
 @click.option('--tokeep', '-k', type=click.Path(), default="", help="Location to save the contigs identified as the target organism(optional).")
 @click.option('--toremove', '-x', type=click.Path(), default="", help="Location to save the contigs identified as not belonging to the target organism (optional).")
 @click.option('--target', '-t', help="The identity of the target organism at the chosen classification level. It is recommended to use the organism's phylum.")
+@click.option('--binary', is_flag=True, help="Use binary target\/nontarget classification.")
 @click.option('--level', '-l', default="phylum", help="The classification level to use when constructing the model. Default is 'phylum'.")
-def runfile_runner(infile, taxdump, level, model, output, tokeep, toremove, target):
+def runfile_runner(infile, taxdump, output, model, tokeep, toremove, binary, target, level):
     """
     Runs a custom analysis using pre-computed data from BBMap.
 
     Input data will be read for all variables which will be used to construct a Decision Tree model.
     """
     validate_taxdump(taxdump, runfile_runner)
-    runfile.runAnalysis(taxdump, infile, level,model, output, tokeep, toremove, target)
+    runfile.runAnalysis(taxdump, infile, level, model, output, tokeep, toremove, binary, target)
 
 """ WIP
 @cli.command(name="filter", context_settings=CONTEXT_SETTINGS)
