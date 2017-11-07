@@ -6,7 +6,7 @@ from sidr import common
 
 
 def readRunfile(runfile, taxidDict, taxDump, classificationLevel):
-    unnecessaryColumns = ["Length", "Covered_percent", "Covered_bases", "Plus_reads", "Minus_reads", "Read_GC"]
+    unnecessaryColumns = ["Covered_bases", "Plus_reads", "Minus_reads"]
     contigs = []
     classList = []
     classMap = {}
@@ -34,11 +34,11 @@ def readRunfile(runfile, taxidDict, taxDump, classificationLevel):
     return contigs, classMap, classList
 
 
-def runAnalysis(blastdb, runfile, classificationLevel, model, output, tokeep, toremove, binary, target):
+def runAnalysis(blastdb, runfile, classificationLevel, modelOutput, output, tokeep, toremove, binary, target):
     taxDump, taxidDict = common.parseTaxdump(blastdb, True)
     contigs, classMap, classList = readRunfile(runfile, taxidDict, taxDump, classificationLevel)
     corpus, testdata, features = common.constructCorpus(contigs, classMap, binary, target)
     click.echo("Corpus constucted, %d contigs in corpus and %d contigs in test data" % (len(corpus), len(testdata)))
-    classifier = common.constructModel(corpus, classList, features)
+    classifier = common.constructModel(corpus, classList, features, modelOutput)
     result = common.classifyData(classifier, testdata, classMap)
     common.generateOutput(tokeep, toremove, result, contigs, target, output)

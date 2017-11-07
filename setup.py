@@ -21,7 +21,6 @@ setup(
         "Topic :: Scientific/Engineering :: Bio-Informatics",
         "License :: OSI Approved :: MIT License",
         "Intended Audience :: Science/Research",
-        "Environment :: Console",
     ],
     install_requires=["NumPy", "SciPy", "pysam", "BioPython", "scikit-learn", "click", "pandas"],
     long_description=_LONG_DESCRIPTION,

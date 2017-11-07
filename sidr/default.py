@@ -1,6 +1,7 @@
 import pysam
 import click
 import gc
+import gzip
 
 from sidr import common
 from Bio.SeqUtils import GC  # for GC content
@@ -17,7 +18,11 @@ def readFasta(fastaFile):
         contigsWithGC: A dictionary mapping contig ids to GC content.
     """
     contigs = []
-    with open(fastaFile) as data:
+    if ".gz" in fastaFile:
+        openFunc = gzip.open
+    else:
+        openFunc = open
+    with openFunc(fastaFile) as data:
         click.echo("Reading %s" % fastaFile)
         with click.progressbar(FastaIterator(data)) as fi:
             for record in fi:  # TODO: conditional formatting
@@ -91,7 +96,7 @@ def readBLAST(classification, taxdump, classificationLevel, contigs):
     return contigs, classMap, classList
 
 
-def runAnalysis(bam, fasta, blastresults, taxdump, model, output, tokeep, toremove, target, binary, level):
+def runAnalysis(bam, fasta, blastresults, taxdump, modelOutput, output, tokeep, toremove, target, binary, level):
     taxdump, taxidDict = common.parseTaxdump(taxdump, False)
     gc.collect()
     click.echo("Taxdump parsed, %d taxIDs loaded" % len(taxdump))
@@ -108,6 +113,6 @@ def runAnalysis(bam, fasta, blastresults, taxdump, model, output, tokeep, toremo
     corpus, testdata, features = common.constructCorpus(list(contigs.values()), classMap, binary, target)
     gc.collect()
     click.echo("Corpus constucted, %d contigs in corpus and %d contigs in test data" % (len(corpus), len(testdata)))
-    classifier = common.constructModel(corpus, classList, features)
+    classifier = common.constructModel(corpus, classList, features, modelOutput)
     result = common.classifyData(classifier, testdata, classMap)
     common.generateOutput(tokeep, toremove, result, corpus, target, output)

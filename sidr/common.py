@@ -129,7 +129,7 @@ def constructCorpus(contigs, classMap, binary, target):
     return corpus, testdata, features
 
 
-def constructModel(corpus, classList, features):
+def constructModel(corpus, classList, features, modelOutput):
     """
     Trains a Decision Tree model on the test corpus.
 
@@ -143,8 +143,8 @@ def constructModel(corpus, classList, features):
     X = []
     Y = []
     for item in corpus:
-        X.append([item[0], item[1]])
-        Y.append(item[2])
+        X.append(item[:-1]) # all but the last item
+        Y.append(item[-1]) # only the last item
     X_train, X_test, Y_train, Y_test = mscv.train_test_split(X, Y, test_size=0.3, random_state=0)
     treeClassifier = tree.DecisionTreeClassifier()
     treeClassifier = treeClassifier.fit(X_train, Y_train)
@@ -161,9 +161,10 @@ def constructModel(corpus, classList, features):
     gradientClassifier = ensemble.GradientBoostingClassifier(n_estimators=100)
     gradientClassifier = gradientClassifier.fit(X_train, Y_train)
     click.echo("Gradient tree boosting classifier built, score is %s out of 1.00" % gradientClassifier.score(X_test, Y_test))
-    with open("model.dot", 'w') as dotfile:
-        tree.export_graphviz(treeClassifier, out_file=dotfile, feature_names=features,
-                             class_names=classList, filled=True, rounded=True, special_characters=True)
+    if modelOutput:
+        with open(model, 'w') as dotfile:
+            tree.export_graphviz(treeClassifier, out_file=dotfile, feature_names=features,
+                                 class_names=classList, filled=True, rounded=True, special_characters=True)
     return treeClassifier
 
 
@@ -178,7 +179,7 @@ def classifyData(classifier, testdata, classMap):
     testdata.sort()
     X = []
     for item in testdata:
-        X.append([item[1], item[2]])
+        X.append(item[1::]) # all but the first item
     Y = classifier.predict(X)
     contigIDs = list(zip(*testdata))[0]  # https://stackoverflow.com/questions/4937491/matrix-transpose-in-python
     result = list(zip(contigIDs, Y))
