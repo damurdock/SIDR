@@ -13,44 +13,44 @@ def readFasta(fastaFile):
     Reads a FASTA file and parses contigs for GC content.
 
     Args:
-        fastaFile: A string containing the location of the FASTA file
+        fastaFile: The path to the FASTA file.
     Returns:
-        contigsWithGC: A dictionary mapping contig ids to GC content.
+        contigs A dictionary mapping contigIDs to sidr.common.Contig objects with GC content as a variable.
     """
     contigs = []
-    if ".gz" in fastaFile:
+    if ".gz" in fastaFile: # should support .fa.gz files in a seamless (if slow) way
         openFunc = gzip.open
     else:
         openFunc = open
     with openFunc(fastaFile) as data:
         click.echo("Reading %s" % fastaFile)
         with click.progressbar(FastaIterator(data)) as fi:
-            for record in fi:  # TODO: conditional formatting
+            for record in fi:  # TODO: conditional formatting and uniqueness check
                 contigs.append(common.Contig(record.id.split(' ')[0], variables={"GC": GC(record.seq)}))
     return dict((x.contigid, x) for x in contigs)  # https://stackoverflow.com/questions/3070242/reduce-python-list-of-objects-to-dict-object-id-object
 
 
-def readBAM(alignment, contigs):
+def readBAM(BAMFile, contigs):
     """
     Parses an aligned BAM file for coverage.
 
     Args:
-        alignment: The BAM file to parse.
-        contigsWithGC: A dictionary mapping contig ids to GC content
+        BAMFile: The BAM file to parse.
+        contigs: List of sidr.common.Contigs taken from input FASTA.
     Returns:
-        contigsWithCov: A list where each line contains a contig id
-            and that contig's average coverage.
+        contigs: Input contigs updated with coverage, measured as an
+                 average over the whole contig.
     """
-    alignment = pysam.AlignmentFile(alignment, "rb")
+    alignment = pysam.AlignmentFile(BAMFile, "rb")
     click.echo("Reading BAM file")
     with click.progressbar(contigs) as ci:
         for contig in ci:
-            covArray = []
+            covArray = [] # coverage over contig = sum(coverage per base)/number of bases
             for pile in alignment.pileup(region=str(contig)):
                 covArray.append(pile.nsegments)
             try:
                 contigs[contig].variables["Coverage"] = (sum(covArray) / len(covArray))
-            except ZeroDivisionError:
+            except ZeroDivisionError: # should only occur if 0 coverage recorded
                 contigs[contig].variables["Coverage"] = 0
     return contigs
 
@@ -63,14 +63,11 @@ def readBLAST(classification, taxdump, classificationLevel, contigs):
         classification: A string containing the filename of the BLAST results. The BLAST
             results must be in the format -outfmt '6 qseqid staxids', additional information
             can be added but the first two fields must be qseqid and staxids.
-        contigsWithCov: A list where each line contains a contig id, that contig's GC content,
-            and that contig's average coverage.
-        taxdump: The names/nodes dict as provided by parseTaxDump().
-        deletedTaxa: A list of taxids that have been deleted from the taxdump.
-        mergedTaxa: A dictionary mapping merged taxa to their new equivalents.
+        taxdump: The NCBI taxdump as processed by parseTaxdump()
         classificationLevel: The level of classification to save into the corpus. Defaults to phylum.
+        contigs: List of sidr.common.Contigs taken from input FASTA
     Returns:
-        contigsWithClass: A dictionary mapping contig ids to the chosen classification.
+        contigs: Input list of contigs updated with classification form BLAST
         classMap: A dictionary mapping class names to their class id used by scikit-learn.
         classList: A list of class names.
     """
@@ -86,10 +83,10 @@ def readBLAST(classification, taxdump, classificationLevel, contigs):
                 taxonomy = common.taxidToLineage(taxid, taxdump, classificationLevel)
                 taxonomy = taxonomy.lower()
                 try:
-                    if taxonomy not in classList:  # I love python
-                        classList.append(taxonomy)
                     contigs[contig].classification = taxonomy
-                except IndexError:  # again, I love python
+                    if taxonomy not in classList:
+                        classList.append(taxonomy)
+                except IndexError:  # if a contig is in BLAST but not FASTA (should be impossible but)
                     continue
     for idx, className in enumerate(classList):
         classMap[className] = idx

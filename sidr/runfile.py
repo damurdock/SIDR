@@ -6,7 +6,7 @@ from sidr import common
 
 
 def readRunfile(runfile, taxidDict, taxDump, classificationLevel):
-    unnecessaryColumns = ["Covered_bases", "Plus_reads", "Minus_reads"]
+    unnecessaryColumns = ["Covered_bases", "Plus_reads", "Minus_reads"] # TODO: different formatting?
     contigs = []
     classList = []
     classMap = {}
@@ -14,13 +14,13 @@ def readRunfile(runfile, taxidDict, taxDump, classificationLevel):
         runfile = pandas.read_csv(rf, index_col=False)
     for column in unnecessaryColumns:
         runfile.drop(column, axis=1, inplace=True)  # https://stackoverflow.com/questions/13411544/delete-column-from-pandas-dataframe for inplace
-    runfile = runfile.fillna(value=False)
+    runfile = runfile.fillna(value=False) # replace all non-existent values with False for later processing
     for row in runfile.iterrows():
-        row = row[1]
+        row = row[1] # iterrows returns a tuple of (index, Series)
         contigid = row["ID"]
         row.drop("ID", inplace=True)
         if not "0" == row["Origin"]:
-            taxid = taxidDict[row["Origin"]]
+            taxid = taxidDict[row["Origin"]] # text to taxid, should give options here
             classification = common.taxidToLineage(taxid, taxDump, classificationLevel)
             if classification not in classList:
                 classList.append(classification)
