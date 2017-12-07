@@ -45,13 +45,12 @@ The last piece of data that must be precalculated is a BLAST_ classification of 
 	-task megablast \
 	-query /path/to/FASTA \
 	-db nt \
-	-outfmt '6 qseqid staxids bitscore std sscinames sskingdoms stitle' \
+	-outfmt '6 qseqid staxids' \
 	-culling_limit 5 \
-	-num_threads 8 \
 	-evalue 1e-25 \
 	-out /path/to/output
 
-Currently SIDR assumes that BLAST input will have the sequence ID in the first column, and the NCBI Taxonomy ID in the second column. Any alternative classification tool may be used so long as it can produce this output.
+Currently SIDR assumes that BLAST input will have the sequence ID in the first column, and the NCBI Taxonomy ID in the second column. Any alternative classification tool may be used so long as it can produce this output. Any additional columns in the BLAST output will be ignored.
 
 .. _BLAST: https://blast.ncbi.nlm.nih.gov/Blast.cgi
 
