@@ -83,9 +83,10 @@ def readBLAST(classification, taxdump, classificationLevel, contigs):
                 taxonomy = common.taxidToLineage(taxid, taxdump, classificationLevel)
                 taxonomy = taxonomy.lower()
                 try:
-                    contigs[contig].classification = taxonomy
-                    if taxonomy not in classList:
-                        classList.append(taxonomy)
+                    if contig not in contigs.keys(): # assume that the first hit in blast output is best
+                        contigs[contig].classification = taxonomy
+                        if taxonomy not in classList:
+                            classList.append(taxonomy)
                 except IndexError:  # if a contig is in BLAST but not FASTA (should be impossible but)
                     continue
     for idx, className in enumerate(classList):
