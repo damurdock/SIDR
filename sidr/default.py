@@ -25,8 +25,10 @@ def readFasta(fastaFile):
     with openFunc(fastaFile) as data:
         click.echo("Reading %s" % fastaFile)
         with click.progressbar(FastaIterator(data)) as fi:
-            for record in fi:  # TODO: conditional formatting and uniqueness check
+            for record in fi:  # TODO: conditional formatting
                 contigs.append(common.Contig(record.id.split(' ')[0], variables={"GC": GC(record.seq)}))
+    if len(contigs) != len(set([x.contigid for x in contigs])): # exit if duplicate contigs, https://stackoverflow.com/questions/5278122/checking-if-all-elements-in-a-list-are-unique
+        raise ValueError("Input FASTA contains duplicate contigIDs, exiting")
     return dict((x.contigid, x) for x in contigs)  # https://stackoverflow.com/questions/3070242/reduce-python-list-of-objects-to-dict-object-id-object
 
 

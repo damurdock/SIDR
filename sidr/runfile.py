@@ -31,6 +31,8 @@ def readRunfile(runfile, taxidDict, taxDump, classificationLevel):
         contigs.append(common.Contig(contigid, variables, classification))
         for idx, className in enumerate(classList):
             classMap[className] = idx
+    if len(contigs) != len(set([x.contigid for x in contigs])): # exit if duplicate contigs, https://stackoverflow.com/questions/5278122/checking-if-all-elements-in-a-list-are-unique
+        raise ValueError("Input FASTA contains duplicate contigIDs, exiting")
     return contigs, classMap, classList
 
 
