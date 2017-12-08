@@ -85,7 +85,7 @@ def readBLAST(classification, taxdump, classificationLevel, contigs):
                 taxonomy = common.taxidToLineage(taxid, taxdump, classificationLevel)
                 taxonomy = taxonomy.lower()
                 try:
-                    if contig not in contigs.keys(): # assume that the first hit in blast output is best
+                    if not contigs[contig].classification: # assume that the first hit in blast output is best
                         contigs[contig].classification = taxonomy
                         if taxonomy not in classList:
                             classList.append(taxonomy)
