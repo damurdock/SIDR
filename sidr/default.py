@@ -81,7 +81,7 @@ def readBLAST(classification, taxdump, classificationLevel, contigs):
             for line in dt:
                 record = line.split("\t")
                 contig = record[0]
-                taxid = record[1]
+                taxid = record[1].strip()
                 taxonomy = common.taxidToLineage(taxid, taxdump, classificationLevel)
                 taxonomy = taxonomy.lower()
                 try:
