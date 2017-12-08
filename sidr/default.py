@@ -115,4 +115,4 @@ def runAnalysis(bam, fasta, blastresults, taxdump, modelOutput, output, tokeep, 
     click.echo("Corpus constucted, %d contigs in corpus and %d contigs in test data" % (len(corpus), len(testdata)))
     classifier = common.constructModel(corpus, classList, features, modelOutput)
     result = common.classifyData(classifier, testdata, classMap)
-    common.generateOutput(tokeep, toremove, result, corpus, target, output)
+    common.generateOutput(tokeep, toremove, result, contigs.values(), target, output)
