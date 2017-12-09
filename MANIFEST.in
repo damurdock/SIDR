@@ -1,0 +1,6 @@
+# thanks to https://hynek.me/articles/sharing-your-labor-of-love-pypi-quick-and-dirty
+include *.rst *.txt LICENSE .travis.yml docs/Makefile 
+recursive-include tests *.py
+recursive-include docs *.rst
+recursive-include docs *.bat
+recursive-include docs *.py
