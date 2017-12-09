@@ -11,13 +11,13 @@ sequence data as either belonging to the target organism, or belonging
 to something else. This classification can be used to filter the data
 for later assembly.
 
-Note: SIDR is pre-release software. Features are currently incomplete and subject to major change.
+Note: SIDR is beta software. Features are currently incomplete and subject to major change.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Installation
 ------------
 
-To install SIDR, clone this repository and run setup.py.
+To install SIDR, clone this repository and run setup.py, or use pip to install.
 
 ::
 
@@ -53,5 +53,3 @@ TODO
 -  More complete documentation
 
 -  More unit tests
-
--  Redo docstrings post-restructure

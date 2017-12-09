@@ -43,7 +43,7 @@ Installing from Source with pip
 
 .. note:: When installing from source, setuptools will attempt to contact PyPI to install dependencies. If this is not an option then dependencies will need to be manually installed.
 
-If PyPI is not an option, SIDR can be installed by running the following command::
+If PyPI is not an option or if you'd like to run the latest development version, SIDR can be installed by running the following command::
 
     pip install git+https://github.com/damurdock/SIDR.git
 
