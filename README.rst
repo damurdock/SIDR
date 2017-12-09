@@ -11,7 +11,7 @@ sequence data as either belonging to the target organism, or belonging
 to something else. This classification can be used to filter the data
 for later assembly.
 
-Note: SIDR is beta software. Features are currently incomplete and subject to major change.
+Note: SIDR is alpha software. Features are currently incomplete and subject to major change.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Installation

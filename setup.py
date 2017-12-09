@@ -1,13 +1,10 @@
 import os
 from setuptools import setup
 
-_LONG_DESCRIPTION = """
-
-"""
 
 setup(
     name="SIDR",
-    version="0.0.1",
+    version="0.0.1a0",
     author="Duncan Murdock",
     author_email="me@duncanmurdock.name",
     description=("Sequence Idenification using Decision tRees; a tool to classify DNA reads using machine learning models."),
@@ -23,7 +20,7 @@ setup(
         "Intended Audience :: Science/Research",
     ],
     install_requires=["NumPy", "SciPy", "pysam", "BioPython", "scikit-learn", "click", "pandas"],
-    long_description=_LONG_DESCRIPTION,
+    long_description=open("README.rst").read(),
     entry_points={
         'console_scripts': [
             'sidr = sidr.cli:cli',
