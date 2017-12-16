@@ -17,6 +17,13 @@ If you have a locally installed version of HTSLib, you can include it by using t
 
 before installing SIDR.
 
+OSX
+---
+
+Users running a recent version of OSX may need to install an alternative python distribution like that provided by Homebrew_. If SIDR installation fails with permission errors, this is the most likely solution.
+
+.. _Homebrew: https://docs.brew.sh/Homebrew-and-Python.html
+
 Using a Virtualenv
 ------------------
 
