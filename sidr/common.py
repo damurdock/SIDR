@@ -169,7 +169,7 @@ def constructModel(corpus, classList, features, modelOutput):
         with open(modelOutput, 'w') as dotfile:
             tree.export_graphviz(baggingClassifier, out_file=dotfile, feature_names=features,
                                  class_names=classList, filled=True, rounded=True, special_characters=True)
-    return treeClassifier
+    return baggingClassifier
 
 
 def classifyData(classifier, testdata, classMap):
