@@ -21,7 +21,7 @@ To install SIDR, clone this repository and run setup.py, or use pip to install.
 
 ::
 
-    pip install git+https://github.com/damurdock/SIDR.git
+    pip install sidr
 
 See the `documentation <https://sidr.readthedocs.io>`__ for more
 details.
