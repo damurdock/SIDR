@@ -16,3 +16,4 @@ Documentation
    dataprep
    rundefault
    runfilerun
+   runfileexample

@@ -32,11 +32,9 @@ If necessary, virtualenv can be installed in the user's home directory (~/.local
 Installing from PyPI
 --------------------
 
-.. warning:: SIDR is not yet published on PyPI
-
 Installing from PyPI is the easiest method, and thus the recommended one. To install SIDR::
 
-    pip install SIDR
+    pip install sidr
 
 Installing from Source with pip
 -------------------------------
