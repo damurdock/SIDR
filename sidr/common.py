@@ -72,14 +72,14 @@ def taxidToLineage(taxid, taxdump, classificationLevel):
     Returns:
         classification: A string containing the lineage at the chosen classification level.
     """
-    taxid = taxid.split(";")[0]
-    tax = taxdump[taxid]
-    if "deleted" in tax: # taxid has been removed from NCBI db, indicates that taxdump and blastdb are out of sync
-        raise Exception("ERROR: Taxon id %s has been deleted from the NCBI DB.\nPlease update your databases and re-run BLAST." % taxid)
-    if "merged" in tax:
-        merge = tax[1]
-        return taxidToLineage(merge, taxdump, classificationLevel)
     try:
+        taxid = taxid.split(";")[0]
+        tax = taxdump[taxid]
+        if "deleted" in tax: # taxid has been removed from NCBI db, indicates that taxdump and blastdb are out of sync
+            raise Exception("ERROR: Taxon id %s has been deleted from the NCBI DB.\nPlease update your databases and re-run BLAST." % taxid)
+        if "merged" in tax:
+            merge = tax[1]
+            return taxidToLineage(merge, taxdump, classificationLevel)
         if tax[2].lower() == classificationLevel.lower(): # final answer
             return tax[0]
         elif taxid != '1': # recursive call
