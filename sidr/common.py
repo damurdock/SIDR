@@ -221,7 +221,7 @@ def generateOutput(tokeep, toremove, result, contigs, target, output):
         if target == contig[1]:
             targetContigIDs.append(contig[0])
         elif "target" == contig[1]:
-            targetContigIDs.append(contig[0]
+            targetContigIDs.append(contig[0])
         else:
             nontargetContigIDs.append(contig[0])
         outputLines.append([contig[0], contig[1], "dt"])
@@ -237,4 +237,3 @@ def generateOutput(tokeep, toremove, result, contigs, target, output):
         with open(toremove, "w+") as f:
             for i in nontargetContigIDs:
                 f.write("%s\n" % i)
-

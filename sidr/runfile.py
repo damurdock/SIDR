@@ -1,6 +1,5 @@
 import click
 import pandas
-import csv
 
 from sidr import common
 

@@ -37,7 +37,7 @@ def cli():
 @click.option('--fasta', '-f', type=click.Path(exists=True), help="Preliminary assembly, in FASTA format.")
 @click.option('--blastresults', '-r', type=click.Path(exists=True), help="Classification of preliminary assembly from BLAST (or similar tools).")
 @click.option('--taxdump', '-d', type=click.Path(), default=os.environ.get('BLASTDB'), help="Location of the NCBI Taxonomy dump. Default is $BLASTDB.")
-@click.option('--model', '-m', 'modelOutput', type=click.Path(), default="", help="Location to save a graphical representation of the trained decision tree (optional). Output is in the form of a DOT file.")
+#@click.option('--model', '-m', 'modelOutput', type=click.Path(), default="", help="Location to save a graphical representation of the trained decision tree (optional). Output is in the form of a DOT file.")
 @click.option('--output', '-o', type=click.Path(), default="%s/classifications.txt" % os.getcwd())
 @click.option('--tokeep', '-k', type=click.Path(), default="", help="Location to save the contigs identified as the target organism(optional).")
 @click.option('--toremove', '-x', type=click.Path(), default="", help="Location to save the contigs identified as not belonging to the target organism (optional).")
@@ -45,10 +45,11 @@ def cli():
 @click.option('--target', '-t', help="The identity of the target organism at the chosen classification level. It is recommended to use the organism's phylum.")
 @click.option('--level', '-l', default="phylum", help="The classification level to use when constructing the model. Default is 'phylum'.")
 # @click.option('--verbose', '-v', count=True, help="Output more debugging options, repeat to increase verbosity (unimplemented).")
-def default_runner(bam, fasta, blastresults, taxdump, modelOutput, output, tokeep, toremove, binary, target, level):
+def default_runner(bam, fasta, blastresults, taxdump, output, tokeep, toremove, binary, target, level):
     """
     Runs the default analysis using raw preassembly data.
     """
+    modelOutput = False
     validate_taxdump(taxdump, runfile_runner)
     default.runAnalysis(bam, fasta, blastresults, taxdump, modelOutput, output, tokeep, toremove, binary, target, level)
 
@@ -57,18 +58,19 @@ def default_runner(bam, fasta, blastresults, taxdump, modelOutput, output, tokee
 @click.option('--infile', '-i', type=click.Path(exists=True), help="Tab-delimited input file.")
 @click.option('--taxdump', '-d', type=click.Path(), default=os.environ.get('BLASTDB'), help="Location of the NCBI Taxonomy dump. Default is $BLASTDB.")
 @click.option('--output', '-o', type=click.Path(), default="%s/classifications.txt" % os.getcwd())
-@click.option('--model', '-m', 'modelOutput', type=click.Path(), default="", help="Location to save a graphical representation of the trained decision tree (optional). Output is in the form of a DOT file.")
+#@click.option('--model', '-m', 'modelOutput', type=click.Path(), default="", help="Location to save a graphical representation of the trained decision tree (optional). Output is in the form of a DOT file.")
 @click.option('--tokeep', '-k', type=click.Path(), default="", help="Location to save the contigs identified as the target organism(optional).")
 @click.option('--toremove', '-x', type=click.Path(), default="", help="Location to save the contigs identified as not belonging to the target organism (optional).")
 @click.option('--target', '-t', help="The identity of the target organism at the chosen classification level. It is recommended to use the organism's phylum.")
 @click.option('--binary', is_flag=True, help="Use binary target/nontarget classification.")
 @click.option('--level', '-l', default="phylum", help="The classification level to use when constructing the model. Default is 'phylum'.")
-def runfile_runner(infile, taxdump, output, modelOutput, tokeep, toremove, binary, target, level):
+def runfile_runner(infile, taxdump, output, tokeep, toremove, binary, target, level):
     """
     Runs a custom analysis using pre-computed data from BBMap or other sources.
 
     Input data will be read for all variables which will be used to construct a Decision Tree model.
     """
+    modelOutput = False
     validate_taxdump(taxdump, runfile_runner)
     runfile.runAnalysis(taxdump, infile, level, modelOutput, output, tokeep, toremove, binary, target)
 
