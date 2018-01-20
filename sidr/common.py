@@ -220,6 +220,8 @@ def generateOutput(tokeep, toremove, result, contigs, target, output):
     for contig in result:
         if target == contig[1]:
             targetContigIDs.append(contig[0])
+        elif "target" == contig[1]:
+            targetContigIDs.append(contig[0]
         else:
             nontargetContigIDs.append(contig[0])
         outputLines.append([contig[0], contig[1], "dt"])
