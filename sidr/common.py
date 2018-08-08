@@ -212,7 +212,7 @@ def generateOutput(tokeep, toremove, result, contigs, target, output):
     outputLines = []
     for contig in contigs:
         if contig.classification:
-            if target == contig.classification:
+            if target.lower() == contig.classification.lower():
                 targetContigIDs.append(contig.contigid)
             else:
                 nontargetContigIDs.append(contig.contigid)
