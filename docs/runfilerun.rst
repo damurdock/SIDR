@@ -9,7 +9,6 @@ To run SIDR in runfile mode, enter a command like: ::
    
     sidr runfile -d [taxdump path] \
     -i [runfile path] \
-    -m model.dot \
     -k tokeep.contigids \
     -x toremove.contigids \
     -t [target phylum]
