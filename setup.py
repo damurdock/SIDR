@@ -4,7 +4,7 @@ from setuptools import setup
 
 setup(
     name="SIDR",
-    version="0.0.1a2",
+    version="0.0.2a1",
     author="Duncan Murdock",
     author_email="me@duncanmurdock.name",
     description=("Sequence Idenification using Decision tRees; a tool to classify DNA reads using machine learning models."),
