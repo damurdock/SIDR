@@ -50,12 +50,12 @@ def default_runner(bam, fasta, blastresults, taxdump, output, tokeep, toremove, 
     Runs the default analysis using raw preassembly data.
     """
     modelOutput = False
-    validate_taxdump(taxdump, runfile_runner)
+    validate_taxdump(taxdump, default_runner)
     default.runAnalysis(bam, fasta, blastresults, taxdump, modelOutput, output, tokeep, toremove, binary, target, level)
 
 
 @cli.command(name="runfile", context_settings=CONTEXT_SETTINGS)
-@click.option('--infile', '-i', type=click.Path(exists=True), help="Tab-delimited input file.")
+@click.option('--infile', '-i', type=click.Path(exists=True), help="Comma-delimited input file.")
 @click.option('--taxdump', '-d', type=click.Path(), default=os.environ.get('BLASTDB'), help="Location of the NCBI Taxonomy dump. Default is $BLASTDB.")
 @click.option('--output', '-o', type=click.Path(), default="%s/classifications.txt" % os.getcwd())
 #@click.option('--model', '-m', 'modelOutput', type=click.Path(), default="", help="Location to save a graphical representation of the trained decision tree (optional). Output is in the form of a DOT file.")
