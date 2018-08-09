@@ -35,14 +35,14 @@ and per-base sequencing coverage. To run it, use:
 
 ::
 
-    sidr default -d [taxdump path] -b [bamfile] -f [assembly FASTA] -r [BLAST results] -m model.dot -k tokeep.contigids -x toremove.contigids -t [target phylum] 
+    sidr default -d [taxdump path] -b [bamfile] -f [assembly FASTA] -r [BLAST results] -k tokeep.contigids -x toremove.contigids -t [target phylum] 
 
 Runfile mode takes a tab-delimited file of contigs, variables, and
 classification as input. To run it, use:
 
 ::
 
-    sidr runfile -i [runfile] -m model.dot -k tokeep.contigids -x toremove.contigids -t [target phylum] 
+    sidr runfile -i [runfile] -k tokeep.contigids -x toremove.contigids -t [target phylum] 
 
 See the `documentation <https://sidr.readthedocs.io>`__ for more
 details.
