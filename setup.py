@@ -19,7 +19,7 @@ setup(
         "License :: OSI Approved :: MIT License",
         "Intended Audience :: Science/Research",
     ],
-    install_requires=["NumPy", "SciPy", "pysam", "BioPython", "scikit-learn", "click", "pandas"],
+    install_requires=["NumPy", "SciPy", "pysam>=0.8.1", "BioPython", "scikit-learn", "click", "pandas"],
     long_description=open("README.rst").read(),
     entry_points={
         'console_scripts': [
