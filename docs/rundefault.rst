@@ -9,7 +9,6 @@ To run SIDR with the default settings on raw data, enter a command like::
     -b [bamfile] \
     -f [assembly FASTA] \
     -r [BLAST results] \
-    -m model.dot \
     -k tokeep.contigids \
     -x toremove.contigids \
     -t [target phylum]
